@@ -3,7 +3,7 @@ package com.smbms.entity;
 public class Admin {
 	private String username;
 	private String password;
-	public  int flag;
+	private  int flag;
 	
 	public String getUsername() {
 		return username;
