@@ -100,7 +100,6 @@ public class CommodityDao {
         return null;
 
     }
-
     //¸ù¾Ýid²éÑ¯
     public Commodity byidCommdity(int id) {
 
