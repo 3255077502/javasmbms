@@ -1,10 +1,14 @@
 package com.smbms.model;
 
 import com.smbms.dao.CommodityDao;
+import com.smbms.dao.UserDao;
 import com.smbms.entity.Admin;
 import com.smbms.dao.AdminDao;
 import com.smbms.entity.Commodity;
+import com.smbms.entity.User;
+import com.sun.xml.internal.ws.wsdl.writer.document.Import;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -144,7 +148,8 @@ public class Model {
         int choose = 0;
         if (admin.getFlag() == 1) {
             System.out.println("1.管理用户 2.管理商品 3.退出");
-            System.out.println("请选择:");
+            System.out.print("请选择:");
+            choose = input.nextInt();
             switch (choose) {
                 case 1:
                     user();
@@ -182,18 +187,23 @@ public class Model {
     public  void  user(){
         int choose =0;
         do {
-            System.out.println("1.新增用户 2.查询用户 3.修改用户 4.删除用户 5.返回主页");
+            System.out.println("1.新增用户 2.根据姓名模糊查询 3.查询全部用户 4.修改用户 5.删除用户 6.返回主页");
             choose=input.nextInt();
             switch (choose){
                 case 1:
+                    userAdd();
                     break;
                 case 2:
+                    userNameById();
                     break;
                 case 3:
                     break;
                 case 4:
                     break;
                 case 5:
+                    userDelete();
+                    break;
+                case 6:
                     Menu(null);
                     break;
 
@@ -201,6 +211,64 @@ public class Model {
         }while (choose!=5);
 
     }
+
+    //删除用户
+    private void userDelete() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作(--查询商品)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入序号:");
+        int id = input.nextInt();
+        int i = new UserDao().UserDel(id);
+        if (i > 0){
+            System.out.println("删除成功！");
+        }else {
+            System.out.println("删除失败！");
+        }
+    }
+
+    //根据姓名模糊查询
+    private void userNameById() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作(--查询商品)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入姓名关键字:");
+        String like_name = input.next();
+        UserDao UserDao = new UserDao();
+        List<User> users = new ArrayList<>();
+        users =UserDao.bySelectName(like_name);
+        if (users.size()==0){
+            System.out.println("序号"+"\t"+"用户姓名"+"\t"+"消费金额"+"\t"+"余额");
+            for (User user : users) {
+                System.out.println(user.getUserid()+"\t"+user.getUsername()+"\t"+user.getConsumption()+"\t"+user.getSum());
+            }
+        }else{
+            System.out.println("没有找到相似的用户数据!");
+        }
+
+    }
+
+    //新增用户
+    private void userAdd() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作(--查询商品)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入用户名:");
+        String Name = input.next();
+        System.out.println("请输入金额:");
+        int sum = input.nextInt();
+        User user = new User();
+        user.setUsername(Name);
+        user.setSum(sum);
+        UserDao userDao = new UserDao();
+        int userAdd = userDao.UserAdd(user);
+        if (userAdd > 0){
+            System.out.println("新增成功！");
+        }else {
+            System.out.println("新增失败！");
+        }
+    }
+
     /**
      * 操作商品
      */
