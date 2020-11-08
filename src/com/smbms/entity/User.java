@@ -1,4 +1,4 @@
-package com.sample;
+package com.smbms.entity;
 
 
 public class User {

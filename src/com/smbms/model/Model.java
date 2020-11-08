@@ -1,7 +1,9 @@
 package com.smbms.model;
 
+import com.smbms.dao.UserDao;
 import com.smbms.entity.Admin;
 import com.smbms.dao.AdminDao;
+import com.smbms.entity.User;
 
 import java.util.Scanner;
 
@@ -183,8 +185,10 @@ public class Model {
             choose=input.nextInt();
             switch (choose){
                 case 1:
+                    userAdd();
                     break;
                 case 2:
+                    userAll();
                     break;
                 case 3:
                     break;
@@ -198,6 +202,35 @@ public class Model {
         }while (choose!=5);
 
     }
+
+    //查询用户
+    private void userAll() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作\t\t");
+        System.out.println("=============================");
+    }
+
+    //新增用户
+    private void userAdd() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入用户名:");
+        String Name = input.next();
+        System.out.println("请输入金额:");
+        int sum = input.nextInt();
+        User user = new User();
+        user.setUsername(Name);
+        user.setSum(sum);
+        UserDao userDao = new UserDao();
+        int i = userDao.UserAdd(user);
+        if (i > 0){
+            System.out.println("新增成功！");
+        }else {
+            System.out.println("新增失败！");
+        }
+    }
+
     /**
      * 操作商品
      */
