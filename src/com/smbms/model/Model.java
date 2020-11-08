@@ -1,8 +1,11 @@
 package com.smbms.model;
 
+import com.smbms.dao.CommodityDao;
 import com.smbms.entity.Admin;
 import com.smbms.dao.AdminDao;
+import com.smbms.entity.Commodity;
 
+import java.util.List;
 import java.util.Scanner;
 
 public class Model {
@@ -209,8 +212,10 @@ public class Model {
             choose=input.nextInt();
             switch (choose){
                 case 1:
+                    goodsAdd();
                     break;
                 case 2:
+                    selectgoods();
                     break;
                 case 3:
                     break;
@@ -223,6 +228,46 @@ public class Model {
 
             }
         }while (choose!=5);
+
+    }
+
+    private void selectgoods() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作(--查询商品)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入商品名称:");
+        String Name =input.next();
+        List<Commodity> list = new CommodityDao().bySelectName(Name);
+        System.out.println("商品序号\t商品名称\t商品价格\t商品库存\t销售总额");
+        for (Commodity item:list) {
+            System.out.println(item.toString());
+        }
+    }
+
+
+    private void goodsAdd() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作(--新增商品)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入商品名称:");
+        String Name =input.next();
+        System.out.println("请输入商品价格:");
+        String price =input.next();
+        System.out.println("请输入商品库存:");
+        int inventory =input.nextInt();
+        //同名演出
+        if ( new CommodityDao().CheckNameisTrue(Name)==null){
+            Commodity cs = new Commodity();
+            cs.setCommodityName(Name);
+            cs.setCommodityPrices(price);
+            cs.setInventory(inventory);
+            int i = new CommodityDao().CommodityAdd(cs);
+            if (i>=0){
+                System.out.println("新增商品成功!");
+            };
+        }else {
+            System.out.println("名字重复，请重新！");
+        }
 
     }
 }
