@@ -74,12 +74,6 @@ public class Commodity {
 
   @Override
   public String toString() {
-    return "Commodity{" +
-            "commodityId=" + commodityId +
-            ", commodityName='" + commodityName + '\'' +
-            ", commodityPrices='" + commodityPrices + '\'' +
-            ", inventory=" + inventory +
-            ", money=" + money +
-            '}';
+    return commodityId +"\t"+ commodityName +"\t" + commodityPrices +"\t" + inventory  +"\t"+ money;
   }
 }
