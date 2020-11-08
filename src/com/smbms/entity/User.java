@@ -1,4 +1,4 @@
-package com.sample;
+package com.smbms.entity;
 
 
 public class User {
@@ -8,6 +8,15 @@ public class User {
   private long consumption;
   private long sum;
 
+  @Override
+  public String toString() {
+    return "User{" +
+            "userid=" + userid +
+            ", username='" + username + '\'' +
+            ", consumption=" + consumption +
+            ", sum=" + sum +
+            '}';
+  }
 
   public long getUserid() {
     return userid;

@@ -1,9 +1,11 @@
 package com.smbms.model;
 
 import com.smbms.dao.CommodityDao;
+import com.smbms.dao.UserDao;
 import com.smbms.entity.Admin;
 import com.smbms.dao.AdminDao;
 import com.smbms.entity.Commodity;
+import com.smbms.entity.User;
 
 import java.util.List;
 import java.util.Scanner;
@@ -11,80 +13,7 @@ import java.util.Scanner;
 public class Model {
     Scanner input = new Scanner(System.in);
 
-//    public Entity service(Entity e) {
-//        // TODO Auto-generated method stub
-//        if (e.getFlag() == 0) {
-//            //执行登录方法
-//            e.setFlag(dologin(e.getUsername(), e.getPassword()));
-//        }
-//        if (e.getFlag() == 4) {
-//            //执行查询商品方法
-//            Goods g = new Goods();
-//            g = findGoodsById(e.getGoodsid());
-//            e.setGoodsid(g.getGoodsId());
-//            e.setGoodsname(g.getGoodsName());
-//            e.setGoodsprice(g.getGoodsPrice());
-//            e.setGoodscount(g.getGoodsCount());
-//        }
-//        if (e.getFlag() == 5) {
-//            //执行新增商品方法
-//            GoodsDao gd = new GoodsDao();
-//            e.setResult(gd.add(e));
-//        }
-//        if (e.getFlag() == 6) {
-//            //执行新增商品方法
-//            GoodsDao gd = new GoodsDao();
-//            e.setResult(gd.del(e));
-//        }
-//        if (e.getFlag() == 7) {
-//            //执行新增商品方法
-//            GoodsDao gd = new GoodsDao();
-//            e.setResult(gd.update(e));
-//        }
-//        if (e.getFlag() == 10) {
-//            //执行新增商品方法
-//            AdminDao ud = new AdminDao();
-//
-//            e.setResult(ud.add(e));
-//        }
-//        if (e.getFlag() == 11) {
-//            //执行新增商品方法
-//            AdminDao ud = new AdminDao();
-//
-//            e.setResult(ud.del(e));
-//        }
-//        if (e.getFlag() == 12) {
-//            //执行新增商品方法
-//            AdminDao ud = new AdminDao();
-//
-//            e.setResult(ud.updateUser(e));
-//        }
-//        if (e.getFlag() == 13) {
-//            //执行新增商品方法
-//            AdminDao ud = new AdminDao();
-//            e = ud.findUser(e.getUsername());
-//        }
-//
-//
-//        return e;
-//    }
-
-
-//    //查询商品方法
-//    private Goods findGoodsById(String goodsid) {
-//        Goods g = new Goods();
-//        GoodsDao gd = new GoodsDao();
-//        g = gd.FindById(goodsid);
-//        return g;
-//    }
-//
-//    /***
-//     * 菜单
-//     */
-//    public void menu() {
-//        System.out.println("当前权限");
-//
-//    }
+   Admin admin =null;
 
     /**
      * 登录界面
@@ -123,6 +52,7 @@ public class Model {
         u.setUsername(adminName);
         //数据库验证
         if (new AdminDao().doLogin(u) != null) {
+            admin=new AdminDao().doLogin(u);
             //表示账号是对的 跳转管理员操作菜单
             Menu(new AdminDao().doLogin(u));
         } else {
@@ -143,7 +73,7 @@ public class Model {
         System.out.println("当前管理员权限:" + (admin.getFlag() == 1 ? "超级管理员" : "普通管理员"));
         int choose = 0;
         if (admin.getFlag() == 1) {
-            System.out.println("1.管理用户 2.管理商品 3.退出");
+            System.out.println("1.管理用户 2.管理商品 3.管理管理员 4.退出");
             System.out.print("请选择:");
             choose = input.nextInt();
             switch (choose) {
@@ -154,6 +84,9 @@ public class Model {
                     goods();
                     break;
                 case 3:
+                    manger();
+                    break;
+                case 4:
                     System.out.println("谢谢使用!");
                     System.exit(0);
                     break;
@@ -177,30 +110,156 @@ public class Model {
     }
 
     /**
+     * 操作管理员
+     */
+    private void manger() {
+        int choose = 0;
+        do {
+            System.out.println("1.新增管理员 2.查询管理员 3.修改密码 4.修改管理员 5.删除管理员  6.返回主页");
+            choose = input.nextInt();
+            switch (choose) {
+                case 1:
+                    userAdd();
+                    break;
+                case 2:
+                    selectUser();
+                    break;
+                case 3:
+                    selectUserAll();
+                    break;
+                case 4:
+                    updateUser();
+                    break;
+                case 5:
+                    deluser();
+                    break;
+                case 6:
+                    Menu(admin);
+                    break;
+
+            }
+        } while (choose != 6);
+    }
+
+    /**
      * 操作用户
      */
 
     public void user() {
         int choose = 0;
         do {
-            System.out.println("1.新增用户 2.查询用户 3.修改用户 4.删除用户 5.返回主页");
+            System.out.println("1.新增用户 2.根据姓名模糊查询 3.查询所有用户 4.修改用户 5.删除用户 6.返回主页");
             choose = input.nextInt();
             switch (choose) {
                 case 1:
+                    userAdd();
                     break;
                 case 2:
+                    selectUser();
                     break;
                 case 3:
+                    selectUserAll();
                     break;
                 case 4:
+                    updateUser();
                     break;
                 case 5:
-                    Menu(null);
+                    deluser();
+                    break;
+                case 6:
+                    Menu(admin);
                     break;
 
             }
-        } while (choose != 5);
+        } while (choose != 6);
 
+    }
+    //删除
+    private void deluser() {
+        System.out.println("=============================");
+        System.out.println("\t管理员操作(--删除用户)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入要删除的用户id:");
+        int id = input.nextInt();
+        int i = new UserDao().UserDel(id);
+        if (i<0){
+            System.out.println("删除失败 !");
+            return;
+        }else {
+            System.out.println("删除成功 !");
+
+        }
+    }
+
+    //修改用户
+    private void updateUser() {
+        System.out.println("=============================");
+        System.out.println("\t管理员操作(--修改用户)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入要修改的用户id:");
+        int id = input.nextInt();
+        User user = new UserDao().byidselectUser(id);
+        if (user == null){
+            System.out.println("没有你要的用户id");
+            return;
+        }
+        System.out.println("请输入要修改的用户名:");
+        String Name = input.next();
+        System.out.println("请输入要修改的余额:");
+        String price = input.next();
+        int i = new UserDao().updateUser(user);
+        if (i >= 0) {
+            System.out.println("修改用户成功!");
+        } else{
+            System.out.println("名字重复，请重新！");
+        }
+    }
+
+    //查询所有
+    private void selectUserAll() {
+        System.out.println("=============================");
+        System.out.println("\t管理员操作(--查询全部用户)\t\t");
+        System.out.println("=============================");
+        List<User> list = new UserDao().bySelectNameAll();
+        System.out.println("卡号\t用户名\t余额\t消费总额");
+        for (User item : list) {
+            System.out.println(item.toString());
+        }
+    }
+
+    //根据姓名模糊查询
+    private void selectUser() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作(--查询用户)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入用户名:");
+        String Name = input.next();
+        List<User> list = new UserDao().bySelectName(Name);
+        System.out.println("卡号\t用户名\t余额\t消费总额");
+        for (User item : list){
+            System.out.println(item.toString());
+        }
+    }
+
+    //新增用户
+    private void userAdd() {
+        System.out.println("=============================");
+        System.out.println("\t\t管理员操作(--新增用户)\t\t");
+        System.out.println("=============================");
+        System.out.println("请输入用户名:");
+        String Name = input.next();
+        System.out.println("请输入余额:");
+        int sum = input.nextInt();
+        User user = new User();
+        user.setUsername(Name);
+        user.setSum(sum);
+        UserDao userDao = new UserDao();
+        int i = userDao.UserAdd(user);
+        if (i > 0){
+            System.out.println("新增成功！");
+        }else {
+            System.out.println("新增失败！");
+        }
     }
 
     /**
@@ -229,8 +288,7 @@ public class Model {
                     delgoods();
                     break;
                 case 6:
-                    System.out.println("谢谢使用!");
-                    System.exit(0);
+                   Menu(admin);
                     break;
 
             }
@@ -238,6 +296,9 @@ public class Model {
 
     }
 
+    /**
+     * 修改商品
+     */
     private void updategoods() {
         System.out.println("=============================");
         System.out.println("\t管理员操作(--修改商品)\t\t");
