@@ -9,6 +9,24 @@ public class Commodity {
   private long inventory;
   private long money;
 
+  public Commodity() {
+  }
+
+  public long getCommodityId() {
+    return commodityId;
+  }
+
+  public void setCommodityId(long commodityId) {
+    this.commodityId = commodityId;
+  }
+
+  public Commodity(long commodityId, String commodityName, String commodityPrices, long inventory, long money) {
+    this.commodityId = commodityId;
+    this.commodityName = commodityName;
+    this.commodityPrices = commodityPrices;
+    this.inventory = inventory;
+    this.money = money;
+  }
 
   public long getCommodity() {
     return commodityId;
@@ -54,4 +72,14 @@ public class Commodity {
     this.money = money;
   }
 
+  @Override
+  public String toString() {
+    return "Commodity{" +
+            "commodityId=" + commodityId +
+            ", commodityName='" + commodityName + '\'' +
+            ", commodityPrices='" + commodityPrices + '\'' +
+            ", inventory=" + inventory +
+            ", money=" + money +
+            '}';
+  }
 }
