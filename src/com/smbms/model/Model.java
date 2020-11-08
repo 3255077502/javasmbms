@@ -91,6 +91,7 @@ public class Model {
         System.out.println("\t\t超市收银系统\t\t");
         System.out.println("=============================");
         System.out.println("1.管理员登录 2.退出");
+        System.out.print("请选择:");
         int choose = input.nextInt();
         switch (choose) {
             case 1:
@@ -136,10 +137,11 @@ public class Model {
         System.out.println("=============================");
         System.out.println("\t\t管理员操作\t\t");
         System.out.println("=============================");
-        System.out.println("当前管理员权限:" + (admin.getFlag() == 1 ? "超级管理员" : "普通管理员") + "\t 总销售:");
+        System.out.println("当前管理员权限:" + (admin.getFlag() == 1 ? "超级管理员" : "普通管理员") );
         int choose = 0;
         if (admin.getFlag() == 1) {
             System.out.println("1.管理用户 2.管理商品 3.退出");
+            System.out.println("请选择:");
             switch (choose) {
                 case 1:
                     user();
@@ -154,6 +156,7 @@ public class Model {
             }
         } else {
             System.out.println("1.管理用户  3.退出");
+            System.out.println("请选择:");
             choose = input.nextInt();
             switch (choose) {
                 case 1:
@@ -164,8 +167,6 @@ public class Model {
                     System.exit(0);
                     break;
             }
-
-
         }
 
 
