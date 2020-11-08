@@ -14,7 +14,7 @@ public class CommodityDao {
     public Commodity CheckNameisTrue(String name){
 
         Commodity commodity=null;
-      String  sql = "select * from admin where commodityName=?";
+      String  sql = "select * from commodity where commodityName=?";
 
         ResultSet rs = DBUtils.executeQuery(sql, new Object[]{name});
         try {
@@ -39,14 +39,15 @@ public class CommodityDao {
        return DBUtils.execute(sql, new Object[]{comm.getCommodityName(),comm.getCommodityPrices(),comm.getInventory(),0});
     }
 
-    //新增商品
+
+    //删除商品
     public int CommodityDel(int id){
 
         String  sql = "delete from commodity where commodityId = ?";
 
         return DBUtils.execute(sql, new Object[]{id});
     }
-    //同名验证
+    //模糊查询
     public List<Commodity> bySelectName(String name){
 
         List<Commodity> list = new ArrayList<Commodity>();
