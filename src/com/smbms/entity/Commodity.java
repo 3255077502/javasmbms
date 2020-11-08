@@ -5,6 +5,7 @@ public class Commodity {
 
   private long commodityId;
   private String commodityName;
+
   private String commodityPrices;
   private long inventory;
   private long money;
