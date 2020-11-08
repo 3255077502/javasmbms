@@ -116,6 +116,7 @@ public class Model {
         int choose = 0;
         do {
             System.out.println("1.新增管理员 2.查询管理员 3.修改密码 4.修改管理员 5.删除管理员  6.返回主页");
+            System.out.print("请选择:");
             choose = input.nextInt();
             switch (choose) {
                 case 1:
@@ -149,6 +150,7 @@ public class Model {
         int choose = 0;
         do {
             System.out.println("1.新增用户 2.根据姓名模糊查询 3.查询所有用户 4.修改用户 5.删除用户 6.返回主页");
+            System.out.print("请选择:");
             choose = input.nextInt();
             switch (choose) {
                 case 1:
@@ -179,7 +181,7 @@ public class Model {
         System.out.println("=============================");
         System.out.println("\t管理员操作(--删除用户)\t\t");
         System.out.println("=============================");
-        System.out.println("请输入要删除的用户id:");
+        System.out.print("请输入要删除的用户id:");
         int id = input.nextInt();
         int i = new UserDao().UserDel(id);
         if (i<0){
@@ -196,7 +198,7 @@ public class Model {
         System.out.println("=============================");
         System.out.println("\t管理员操作(--修改用户)\t\t");
         System.out.println("=============================");
-        System.out.println("请输入要修改的用户id:");
+        System.out.print("请输入要修改的用户id:");
         int id = input.nextInt();
         User user = new UserDao().byidselectUser(id);
         if (user == null){
@@ -232,7 +234,7 @@ public class Model {
         System.out.println("=============================");
         System.out.println("\t\t管理员操作(--查询用户)\t\t");
         System.out.println("=============================");
-        System.out.println("请输入用户名:");
+        System.out.print("请输入用户名:");
         String Name = input.next();
         List<User> list = new UserDao().bySelectName(Name);
         System.out.println("卡号\t用户名\t余额\t消费总额");
@@ -246,9 +248,9 @@ public class Model {
         System.out.println("=============================");
         System.out.println("\t\t管理员操作(--新增用户)\t\t");
         System.out.println("=============================");
-        System.out.println("请输入用户名:");
+        System.out.print("请输入用户名:");
         String Name = input.next();
-        System.out.println("请输入余额:");
+        System.out.print("请输入余额:");
         int sum = input.nextInt();
         User user = new User();
         user.setUsername(Name);
@@ -270,6 +272,7 @@ public class Model {
         int choose = 0;
         do {
             System.out.println("1.新增商品 2.根据商品名称查询 3查询全部商品. 4.修改商品 5.删除商品 6.返回主页");
+            System.out.print("请选择:");
             choose = input.nextInt();
             switch (choose) {
                 case 1:
@@ -310,11 +313,11 @@ public class Model {
             System.out.println("没有你要的商品序号id!");
             return;
         }
-        System.out.println("请输入要修改商品名称:");
+        System.out.print("请输入要修改商品名称:");
         String Name = input.next();
-        System.out.println("请输入要修改商品价格:");
+        System.out.print("请输入要修改商品价格:");
         String price = input.next();
-        System.out.println("请输入要修改商品库存:");
+        System.out.print("请输入要修改商品库存:");
         int inventory = input.nextInt();
         //同名演出
         commodity.setCommodityName(Name);
