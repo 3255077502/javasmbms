@@ -1,6 +1,7 @@
 package com.smbms.model;
 
 import com.smbms.dao.CommodityDao;
+import com.smbms.dao.DBUtils;
 import com.smbms.dao.UserDao;
 import com.smbms.entity.Admin;
 import com.smbms.dao.AdminDao;
@@ -13,7 +14,7 @@ import java.util.Scanner;
 public class Model {
     Scanner input = new Scanner(System.in);
 
-   Admin admin =null;
+    Admin admin = null;
 
     /**
      * 登录界面
@@ -52,7 +53,7 @@ public class Model {
         u.setUsername(adminName);
         //数据库验证
         if (new AdminDao().doLogin(u) != null) {
-            admin=new AdminDao().doLogin(u);
+            admin = new AdminDao().doLogin(u);
             //表示账号是对的 跳转管理员操作菜单
             Menu(new AdminDao().doLogin(u));
         } else {
@@ -120,19 +121,19 @@ public class Model {
             choose = input.nextInt();
             switch (choose) {
                 case 1:
-                    userAdd();
+                    addAdmin();
                     break;
                 case 2:
-                    selectUser();
+                    selectAdmin();
                     break;
                 case 3:
-                    selectUserAll();
+                    updateAdminPwd();
                     break;
                 case 4:
-                    updateUser();
+                    updateAdmin();
                     break;
                 case 5:
-                    deluser();
+                    delAdmin();
                     break;
                 case 6:
                     Menu(admin);
@@ -140,6 +141,99 @@ public class Model {
 
             }
         } while (choose != 6);
+    }
+
+    private void updateAdmin() {
+        System.out.println("=============================");
+        System.out.println("\t管理员操作(--修改管理员)\t\t");
+        System.out.println("=============================");
+        System.out.print("请输入你修改管理员编号:");
+        Admin admin = new AdminDao().doLogin(input.nextInt());
+        if (admin==null){
+            System.out.println("找不到你要修改的管理员!");
+            return;
+        }
+        System.out.print("请输入要修改的管理员账户：");
+        String adminname =input.next();
+        System.out.print("请输入要修改的管理员密码：");
+        String adminpwd =input.next();
+        //调用新增
+        Admin admin1= new Admin();
+        admin1.setUsername(adminname);
+        admin1.setPassword(adminpwd);
+        if (new AdminDao().add(admin1)==1){
+            System.out.println("新增成功!");
+        }else {
+            System.out.println("新增失败!");
+        }
+    }
+
+    private void delAdmin() {
+        System.out.println("=============================");
+        System.out.println("\t管理员操作(--删除管理员)\t\t");
+        System.out.println("=============================");
+        System.out.print("请输入你删除管理员编号:");
+        int id = input.nextInt();
+        if (new AdminDao().delte(id)==1){
+            System.out.println("删除成功！");
+        }else{
+            System.out.println("删除失败！");
+        }
+    }
+
+    //新增管理员
+    private void addAdmin() {
+        System.out.println("=============================");
+        System.out.println("\t管理员操作(--新增管理员)\t\t");
+        System.out.println("=============================");
+        System.out.print("请输入管理员账户：");
+        String adminname =input.next();
+        System.out.print("请输入管理员密码：");
+        String adminpwd =input.next();
+        //调用新增
+        Admin admin1= new Admin();
+        admin1.setUsername(adminname);
+        admin1.setPassword(adminpwd);
+        if (new AdminDao().add(admin1)==1){
+            System.out.println("新增成功!");
+        }else {
+            System.out.println("新增失败!");
+        }
+    }
+    //修改管理员
+    private void updateAdminPwd() {
+        System.out.println("=============================");
+        System.out.println("\t管理员操作(--修改管理员密码)\t\t");
+        System.out.println("=============================");
+        System.out.print("请输入你的旧密码:");
+        String oldpwd = input.next();
+        if (!admin.getPassword().equals(oldpwd)) {
+            System.out.println("旧密码错误，请重新");
+        }
+        System.out.print("请输入新密码");
+        String newpwd = input.next();
+        if (new AdminDao().update(newpwd) > 0) {
+            System.out.println("修改成功！");
+            admin = null;
+            show();
+        } else {
+            System.out.println("修改失败！");
+
+        }
+    }
+    //
+    private void selectAdmin() {
+        System.out.println("=============================");
+        System.out.println("\t管理员操作(--查询管理员)\t\t");
+        System.out.println("=============================");
+        //调用查询方法
+        System.out.println("管理员编号\t管理员账户\t管理员密码\t管理员权限");
+        List<Admin> admins = new AdminDao().byidSelect();
+        System.out.println(admins.size());
+        for (Admin item: admins
+             ) {
+            item.toString();
+        }
     }
 
     /**
@@ -176,6 +270,7 @@ public class Model {
         } while (choose != 6);
 
     }
+
     //删除
     private void deluser() {
         System.out.println("=============================");
@@ -184,10 +279,10 @@ public class Model {
         System.out.print("请输入要删除的用户id:");
         int id = input.nextInt();
         int i = new UserDao().UserDel(id);
-        if (i<0){
+        if (i < 0) {
             System.out.println("删除失败 !");
             return;
-        }else {
+        } else {
             System.out.println("删除成功 !");
 
         }
@@ -201,7 +296,7 @@ public class Model {
         System.out.print("请输入要修改的用户id:");
         int id = input.nextInt();
         User user = new UserDao().byidselectUser(id);
-        if (user == null){
+        if (user == null) {
             System.out.println("没有你要的用户id");
             return;
         }
@@ -212,7 +307,7 @@ public class Model {
         int i = new UserDao().updateUser(user);
         if (i >= 0) {
             System.out.println("修改用户成功!");
-        } else{
+        } else {
             System.out.println("名字重复，请重新！");
         }
     }
@@ -238,7 +333,7 @@ public class Model {
         String Name = input.next();
         List<User> list = new UserDao().bySelectName(Name);
         System.out.println("卡号\t用户名\t余额\t消费总额");
-        for (User item : list){
+        for (User item : list) {
             System.out.println(item.toString());
         }
     }
@@ -257,9 +352,9 @@ public class Model {
         user.setSum(sum);
         UserDao userDao = new UserDao();
         int i = userDao.UserAdd(user);
-        if (i > 0){
+        if (i > 0) {
             System.out.println("新增成功！");
-        }else {
+        } else {
             System.out.println("新增失败！");
         }
     }
@@ -291,7 +386,7 @@ public class Model {
                     delgoods();
                     break;
                 case 6:
-                   Menu(admin);
+                    Menu(admin);
                     break;
 
             }
@@ -326,11 +421,11 @@ public class Model {
         int i = new CommodityDao().updatecommdity(commodity);
         if (i >= 0) {
             System.out.println("修改商品成功!");
-        } else{
-        System.out.println("名字重复，请重新！");
-    }
+        } else {
+            System.out.println("名字重复，请重新！");
+        }
 
-}
+    }
 
     private void delgoods() {
         System.out.println("=============================");
